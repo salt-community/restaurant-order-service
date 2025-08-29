@@ -13,7 +13,7 @@ public record OrderRequestDto(
     public Order toOrder() {
         Order order = new Order();
         order.setOrderStatus(status);
-        return new Order();
+        return order;
     }
 
 }
