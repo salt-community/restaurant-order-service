@@ -58,6 +58,13 @@
             <artifactId>spring-kafka-test</artifactId>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <!-- If you use Spring Boot parent, you can omit the version -->
+            <version>42.7.4</version>
+        </dependency>
+
     </dependencies>
 
     <build>
