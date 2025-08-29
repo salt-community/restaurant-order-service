@@ -9,4 +9,8 @@ public record KafkaOrderDto(UUID orderId, String status) {
     public static KafkaOrderDto fromOrder(Order order) {
         return new KafkaOrderDto(order.getOrderId(), order.getOrderStatus().toString());
     }
+
+    public Order toOrder() {
+        return new Order(orderId, OrderStatus.valueOf(status));
+    }
 }
