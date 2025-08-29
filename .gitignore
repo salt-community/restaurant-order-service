@@ -1,4 +1,5 @@
 .env
+kafka-docs
 
 HELP.md
 target/
