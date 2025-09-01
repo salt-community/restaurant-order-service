@@ -26,6 +26,7 @@ public class OutboxEvent {
 
     private UUID orderId;
 
+    @Column(columnDefinition = "TEXT")
     private String payload;
 
     private Instant createdAt;
