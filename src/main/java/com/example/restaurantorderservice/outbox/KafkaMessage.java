@@ -10,7 +10,11 @@ import java.util.List;
 import java.util.UUID;
 
 public record KafkaMessage(
-    UUID orderId, OrderStatus orderStatus, Instant createdAt, double totalPrice, List<Item> items
+    UUID orderId,
+    OrderStatus orderStatus,
+    Instant createdAt,
+    double totalPrice,
+    List<Item> items
 ) {
     public static KafkaMessage fromOrder(Order order) {
         return new KafkaMessage(

@@ -4,6 +4,7 @@ package com.example.restaurantorderservice.service;
 import com.example.restaurantorderservice.dto.request.OrderRequestDto;
 import com.example.restaurantorderservice.model.Item;
 import com.example.restaurantorderservice.model.Order;
+import com.example.restaurantorderservice.outbox.KafkaMessage;
 import com.example.restaurantorderservice.outbox.OutboxEvent;
 import com.example.restaurantorderservice.outbox.OutboxRepository;
 import com.example.restaurantorderservice.repository.ItemRepository;
@@ -38,10 +39,9 @@ public class OrderService {
 
         itemRepository.saveAll(order.getItems());
 
-
         String payload;
         try {
-             payload = mapper.writeValueAsString(order);
+             payload = mapper.writeValueAsString(KafkaMessage.fromOrder(order));
         } catch (JsonProcessingException e) {
 
             //TODO change exception
