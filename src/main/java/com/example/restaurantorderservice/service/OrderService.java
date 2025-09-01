@@ -1,6 +1,6 @@
 package com.example.restaurantorderservice.service;
 
-import com.example.restaurantorderservice.dto.kafka.KafkaOrderDto;
+//import com.example.restaurantorderservice.dto.kafka.KafkaOrderDto;
 import com.example.restaurantorderservice.dto.request.OrderRequestDto;
 import com.example.restaurantorderservice.model.Order;
 import com.example.restaurantorderservice.outbox.OutboxEvent;
@@ -22,7 +22,7 @@ public class OrderService {
 
     private final OrderRepository orderRepository;
     private final OutboxRepository outboxRepository;
-    private final KafkaTemplate<String, KafkaOrderDto> kafkaTemplate;
+//    private final KafkaTemplate<String, KafkaOrderDto> kafkaTemplate;
     private final ObjectMapper mapper;
 
     public void createOrder(OrderRequestDto req) {
