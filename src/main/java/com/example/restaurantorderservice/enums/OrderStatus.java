@@ -2,6 +2,9 @@ package com.example.restaurantorderservice.enums;
 
 public enum OrderStatus {
     PLACED,
-    DONE,
+    PAID,
+    ACCEPTED,
+    SHIPMENT_STARTED,
+    DELIVERED,
     CANCELED
 }
