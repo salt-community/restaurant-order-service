@@ -18,7 +18,7 @@ public record OrderRequestDto(
         order.setCreatedAt(Instant.now());
         order.setTotalPrice(
             items.stream()
-                .mapToDouble(ItemRequestDto::price)
+                .mapToDouble(itemRequestDto -> itemRequestDto.price() * itemRequestDto.quantity())
                 .sum()
         );
         order.setItems(items.stream().map(ItemRequestDto::toItem).toList());
