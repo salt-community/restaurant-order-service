@@ -2,9 +2,11 @@ package com.example.restaurantorderservice.service;
 
 //import com.example.restaurantorderservice.dto.kafka.KafkaOrderDto;
 import com.example.restaurantorderservice.dto.request.OrderRequestDto;
+import com.example.restaurantorderservice.model.Item;
 import com.example.restaurantorderservice.model.Order;
 import com.example.restaurantorderservice.outbox.OutboxEvent;
 import com.example.restaurantorderservice.outbox.OutboxRepository;
+import com.example.restaurantorderservice.repository.ItemRepository;
 import com.example.restaurantorderservice.repository.OrderRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -21,13 +23,21 @@ import java.time.Instant;
 public class OrderService {
 
     private final OrderRepository orderRepository;
+
+    private final ItemRepository itemRepository;
+
     private final OutboxRepository outboxRepository;
+
 //    private final KafkaTemplate<String, KafkaOrderDto> kafkaTemplate;
+
     private final ObjectMapper mapper;
 
     public void createOrder(OrderRequestDto req) {
         Order order = req.toOrder();
         orderRepository.save(order);
+
+        itemRepository.saveAll(order.getItems());
+
 
         String payload;
         try {

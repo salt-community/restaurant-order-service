@@ -30,7 +30,8 @@ public class Order {
 
     private double totalPrice;
 
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "order_id")
     private List<Item> items;
 
 }
