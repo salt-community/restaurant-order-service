@@ -1,8 +1,8 @@
 package com.example.restaurantorderservice.service;
 
 //import com.example.restaurantorderservice.dto.kafka.KafkaOrderDto;
+
 import com.example.restaurantorderservice.dto.request.OrderRequestDto;
-import com.example.restaurantorderservice.model.Item;
 import com.example.restaurantorderservice.model.Order;
 import com.example.restaurantorderservice.outbox.KafkaMessage;
 import com.example.restaurantorderservice.outbox.OutboxEvent;
@@ -12,9 +12,6 @@ import com.example.restaurantorderservice.repository.OrderRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
-import org.apache.kafka.clients.consumer.ConsumerRecord;
-import org.springframework.kafka.annotation.KafkaListener;
-import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -42,7 +39,7 @@ public class OrderService {
 
         String payload;
         try {
-             payload = mapper.writeValueAsString(KafkaMessage.fromOrder(order));
+            payload = mapper.writeValueAsString(KafkaMessage.fromOrder(order));
         } catch (JsonProcessingException e) {
 
             //TODO change exception
@@ -50,10 +47,10 @@ public class OrderService {
         }
 
         OutboxEvent outboxEvent = OutboxEvent.builder()
-                .orderId(order.getOrderId())
-                .payload(payload)
-                .createdAt(Instant.now())
-                .processed(false)
+            .orderId(order.getOrderId())
+            .payload(payload)
+            .createdAt(Instant.now())
+            .processed(false)
             .build();
 
         outboxRepository.save(outboxEvent);
