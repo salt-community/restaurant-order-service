@@ -33,6 +33,14 @@ public class OrderService {
 
     private final ObjectMapper mapper;
 
+    private String mapToJson(Object object) {
+        try {
+            return mapper.writeValueAsString(object);
+        } catch (JsonProcessingException e) {
+            throw new JsonMapperException(e.getMessage());
+        }
+    }
+
     @Transactional
     public UUID createOrder(OrderRequestDto req) {
         Order order = req.toOrder();
@@ -40,12 +48,9 @@ public class OrderService {
 
         itemRepository.saveAll(order.getItems());
 
-        String payload;
-        try {
-            payload = mapper.writeValueAsString(KafkaMessageDto.fromOrder(order));
-        } catch (JsonProcessingException e) {
-            throw new JsonMapperException(e.getMessage());
-        }
+        String payload = mapToJson(
+            KafkaMessageDto.fromOrder(order)
+        );
 
         OutboxEvent outboxEvent = OutboxEvent.builder()
             .orderId(order.getOrderId())
