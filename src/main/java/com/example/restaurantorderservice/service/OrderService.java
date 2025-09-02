@@ -2,11 +2,11 @@ package com.example.restaurantorderservice.service;
 
 //import com.example.restaurantorderservice.dto.kafka.KafkaOrderDto;
 
+import com.example.restaurantorderservice.dto.kafka.KafkaMessageDto;
 import com.example.restaurantorderservice.dto.request.OrderRequestDto;
 import com.example.restaurantorderservice.exception.custom.JsonMapperException;
 import com.example.restaurantorderservice.exception.custom.NotFoundException;
 import com.example.restaurantorderservice.model.Order;
-import com.example.restaurantorderservice.dto.kafka.KafkaMessageDto;
 import com.example.restaurantorderservice.outbox.OutboxEvent;
 import com.example.restaurantorderservice.outbox.OutboxRepository;
 import com.example.restaurantorderservice.repository.ItemRepository;
@@ -67,6 +67,11 @@ public class OrderService {
 
     public Order getOrder(UUID orderId) {
         return getOrderById(orderId);
+    }
+
+    public void removeOrder(UUID orderId) {
+        Order order = getOrderById(orderId);
+        orderRepository.delete(order);
     }
 
     public Order getOrderById(UUID orderId) {

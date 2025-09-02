@@ -77,6 +77,33 @@ public class OrderController {
         return ResponseEntity.ok(OrderResponseDto.fromOrder(order));
     }
 
+    @Operation(
+        summary = "Remove order by ID",
+        description = "Should respond with a specific order"
+    )
+    @ApiResponses(
+        value = {
+            @ApiResponse(
+                responseCode = "204",
+                description = "No Content - Successfully deleted Order"
+            ),
+            @ApiResponse(
+                responseCode = "404",
+                description = "Order Not Found"
+            ),
+            @ApiResponse(
+                responseCode = "500",
+                description = "Internal server error"
+            ),
+        }
+    )
+    @DeleteMapping("/order/{orderId}")
+    public ResponseEntity<Void> removeOrder(
+        @PathVariable UUID orderId) {
+        orderService.removeOrder(orderId);
+        return ResponseEntity.noContent().build();
+    }
+
 
 }
 
