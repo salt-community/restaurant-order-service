@@ -18,6 +18,7 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
+import java.util.UUID;
 
 @Service
 @AllArgsConstructor
@@ -33,7 +34,7 @@ public class OrderService {
 
     private final ObjectMapper mapper;
 
-    public void createOrder(OrderRequestDto req) {
+    public UUID createOrder(OrderRequestDto req) {
         Order order = req.toOrder();
         orderRepository.save(order);
 
@@ -56,6 +57,8 @@ public class OrderService {
             .build();
 
         outboxRepository.save(outboxEvent);
+
+        return order.getOrderId();
     }
 
 //    @KafkaListener(id = "myId", topics = "orders")

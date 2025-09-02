@@ -1,11 +1,13 @@
 package com.example.restaurantorderservice.controller;
 
 import com.example.restaurantorderservice.dto.request.OrderRequestDto;
+import com.example.restaurantorderservice.dto.response.OrderResponseDto;
 import com.example.restaurantorderservice.service.OrderService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -21,7 +23,7 @@ public class OrderController {
 
     @Operation(
         summary = "Placing order",
-        description = "Should respond with 'Hello World!'"
+        description = "Should respond OrderId"
     )
     @ApiResponses(
         value = {
@@ -36,12 +38,13 @@ public class OrderController {
         }
     )
     @PostMapping("/place-order")
-    public ResponseEntity<String> createOrder(
+    public ResponseEntity<OrderResponseDto> createOrder(
         @RequestBody OrderRequestDto req) {
-        orderService.createOrder(req);
-
-        return ResponseEntity.ok("OrderPlaced");
+        OrderResponseDto response = new OrderResponseDto(orderService.createOrder(req));
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
+
+
 }
 
 
