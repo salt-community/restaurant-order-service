@@ -17,18 +17,16 @@ public class OutboxWorker {
 
     @Scheduled(fixedDelay = 500)
     public void publishOutboxEvents() {
-        
+
         List<OutboxEvent> outboxEvents = outboxRepository.findAllUnprocessed();
 
-        for (OutboxEvent event: outboxEvents) {
+        for (OutboxEvent event : outboxEvents) {
             System.out.println("eveneeeeeeeeeeet = " + event);
-            kafkaTemplate.send("orders", event.getPayload());
+            kafkaTemplate.send("order.created", event.getPayload());
             event.setProcessed(true);
             System.out.println("eveneeeeeeeeeeet = " + event);
             outboxRepository.save(event);
         }
-
-
 
 
     }

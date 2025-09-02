@@ -1,9 +1,9 @@
 package com.example.restaurantorderservice.service;
 
+import com.example.restaurantorderservice.dto.kafka.KafkaMessageDto;
 import com.example.restaurantorderservice.dto.kafka.KafkaPaidOrderAuthorizedDto;
 import com.example.restaurantorderservice.dto.kafka.KafkaPaidOrderFailedDto;
 import com.example.restaurantorderservice.dto.kafka.KafkaPaidOrderRefunded;
-import com.example.restaurantorderservice.dto.kafka.KafkaMessageDto;
 import com.example.restaurantorderservice.dto.request.OrderRequestDto;
 import com.example.restaurantorderservice.exception.custom.JsonMapperException;
 import com.example.restaurantorderservice.exception.custom.NotFoundException;
@@ -32,8 +32,6 @@ public class OrderService {
     private final ItemRepository itemRepository;
 
     private final OutboxRepository outboxRepository;
-
-//    private final KafkaTemplate<String, KafkaOrderDto> kafkaTemplate;
 
     private final ObjectMapper mapper;
 
@@ -95,23 +93,7 @@ public class OrderService {
         e.printStackTrace();
     }
 
-//    @KafkaListener(id = "myId", topics = "orders")
-//    public void listen(ConsumerRecord<String, String> record) {
-//        // injecting ConsumerRecord in case we need message metadata
-//        // otherwise can just inject a String
-//        String value = record.value();
-//        try {
-//            KafkaOrderDto dto = mapper.readValue(value, KafkaOrderDto.class);
-//            Order order = dto.toOrder();
-//            System.out.println("order id = " + order.getOrderId());
-//            System.out.println("order status = " + order.getOrderStatus());
-//            orderRepository.save(order);
-//        } catch (JsonProcessingException e) {
-//
-//            System.out.println("EXCEPTION DESERIALIZING MESSAGE!");
-//            e.printStackTrace();
-//        }
-    @KafkaListener(id = "myId", topics = "TOPIC_AUTHORIZED")
+    @KafkaListener(topics = "${app.topic.payment.authorized}")
     public void listenPaidOrderAuthorized(ConsumerRecord<String, String> record) {
         String value = record.value();
         try {
@@ -121,7 +103,7 @@ public class OrderService {
         }
     }
 
-    @KafkaListener(id = "myId", topics = "TOPIC_FAILED")
+    @KafkaListener(topics = "${app.topic.payment.failed}")
     public void listenPaidOrderFailed(ConsumerRecord<String, String> record) {
         String value = record.value();
         try {
@@ -131,7 +113,7 @@ public class OrderService {
         }
     }
 
-    @KafkaListener(id = "myId", topics = "TOPIC_REFUND")
+    @KafkaListener(topics = "${app.topic.payment.refund}")
     public void listenPaidOrderRefund(ConsumerRecord<String, String> record) {
         String value = record.value();
         try {

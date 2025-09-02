@@ -25,6 +25,7 @@ app:
       canceled: ${TOPIC_ORDER_CANCELED}
     payment:
       authorized: ${TOPIC_PAYMENT_AUTHORIZED}
+      refund: ${TOPIC_PAYMENT_REFUND}
       failed: ${TOPIC_PAYMENT_FAILED}
     kitchen:
       accepted: ${TOPIC_KITCHEN_ACCEPTED}
