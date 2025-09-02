@@ -3,6 +3,7 @@ package com.example.restaurantorderservice.service;
 //import com.example.restaurantorderservice.dto.kafka.KafkaOrderDto;
 
 import com.example.restaurantorderservice.dto.request.OrderRequestDto;
+import com.example.restaurantorderservice.exception.custom.NotFoundException;
 import com.example.restaurantorderservice.model.Order;
 import com.example.restaurantorderservice.outbox.KafkaMessage;
 import com.example.restaurantorderservice.outbox.OutboxEvent;
@@ -56,6 +57,20 @@ public class OrderService {
         outboxRepository.save(outboxEvent);
 
         return order.getOrderId();
+    }
+
+    public Order getOrder(UUID orderId) {
+        return getOrderById(orderId);
+    }
+
+    public Order getOrderById(UUID orderId) {
+        return orderRepository
+            .findById(orderId)
+            .orElseThrow(() ->
+                new NotFoundException(
+                    "Order with Id: %s not found".formatted(orderId)
+                )
+            );
     }
 
 //    @KafkaListener(id = "myId", topics = "orders")
