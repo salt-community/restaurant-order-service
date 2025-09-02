@@ -7,8 +7,8 @@ import jakarta.validation.constraints.NotNull;
 
 public record ItemRequestDto(
     @NotNull @NotBlank String name,
-    @NotNull @Min(1) int quantity,
-    @NotNull @Min(0) double price
+    @Min(1) int quantity,
+    @Min(0) double price
 ) {
     public Item toItem() {
         Item item = new Item();

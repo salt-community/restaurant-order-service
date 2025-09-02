@@ -3,9 +3,10 @@ package com.example.restaurantorderservice.service;
 //import com.example.restaurantorderservice.dto.kafka.KafkaOrderDto;
 
 import com.example.restaurantorderservice.dto.request.OrderRequestDto;
+import com.example.restaurantorderservice.exception.custom.JsonMapperException;
 import com.example.restaurantorderservice.exception.custom.NotFoundException;
 import com.example.restaurantorderservice.model.Order;
-import com.example.restaurantorderservice.outbox.KafkaMessage;
+import com.example.restaurantorderservice.dto.kafka.KafkaMessageDto;
 import com.example.restaurantorderservice.outbox.OutboxEvent;
 import com.example.restaurantorderservice.outbox.OutboxRepository;
 import com.example.restaurantorderservice.repository.ItemRepository;
@@ -14,6 +15,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
 import java.util.UUID;
@@ -32,20 +34,24 @@ public class OrderService {
 
     private final ObjectMapper mapper;
 
+    private String mapToJson(Object object) {
+        try {
+            return mapper.writeValueAsString(object);
+        } catch (JsonProcessingException e) {
+            throw new JsonMapperException(e.getMessage());
+        }
+    }
+
+    @Transactional
     public UUID createOrder(OrderRequestDto req) {
         Order order = req.toOrder();
         orderRepository.save(order);
 
         itemRepository.saveAll(order.getItems());
 
-        String payload;
-        try {
-            payload = mapper.writeValueAsString(KafkaMessage.fromOrder(order));
-        } catch (JsonProcessingException e) {
-
-            //TODO change exception
-            throw new RuntimeException(e);
-        }
+        String payload = mapToJson(
+            KafkaMessageDto.fromOrder(order)
+        );
 
         OutboxEvent outboxEvent = OutboxEvent.builder()
             .orderId(order.getOrderId())

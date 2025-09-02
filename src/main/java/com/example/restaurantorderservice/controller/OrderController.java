@@ -8,6 +8,7 @@ import com.example.restaurantorderservice.service.OrderService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -40,7 +41,7 @@ public class OrderController {
     )
     @PostMapping("/place-order")
     public ResponseEntity<OrderIdResponseDto> createOrder(
-        @RequestBody OrderRequestDto req) {
+        @RequestBody @Valid OrderRequestDto req) {
         OrderIdResponseDto response = new OrderIdResponseDto(orderService.createOrder(req));
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
