@@ -24,14 +24,18 @@ public class OrderController {
     private final OrderService orderService;
 
     @Operation(
-        summary = "Placing order",
+        summary = "Creating/placing order",
         description = "Should respond with OrderId"
     )
     @ApiResponses(
         value = {
             @ApiResponse(
+                responseCode = "201",
+                description = "Created"
+            ),
+            @ApiResponse(
                 responseCode = "200",
-                description = "Successful"
+                description = "Bad Request"
             ),
             @ApiResponse(
                 responseCode = "500",
