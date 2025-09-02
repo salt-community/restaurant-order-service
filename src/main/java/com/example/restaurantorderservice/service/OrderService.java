@@ -34,14 +34,6 @@ public class OrderService {
 
     private final ObjectMapper mapper;
 
-    private String mapToJson(Object object) {
-        try {
-            return mapper.writeValueAsString(object);
-        } catch (JsonProcessingException e) {
-            throw new JsonMapperException(e.getMessage());
-        }
-    }
-
     @Transactional
     public UUID createOrder(OrderRequestDto req) {
         Order order = req.toOrder();
@@ -82,6 +74,14 @@ public class OrderService {
                     "Order with Id: %s not found".formatted(orderId)
                 )
             );
+    }
+
+    private String mapToJson(Object object) {
+        try {
+            return mapper.writeValueAsString(object);
+        } catch (JsonProcessingException e) {
+            throw new JsonMapperException(e.getMessage());
+        }
     }
 
 //    @KafkaListener(id = "myId", topics = "orders")

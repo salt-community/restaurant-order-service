@@ -18,3 +18,21 @@ spring:
     consumer:
       auto-offset-reset: earliest
 
+app:
+  topic:
+    order:
+      created: ${TOPIC_ORDER_CREATED}
+      canceled: ${TOPIC_ORDER_CANCELED}
+    payment:
+      authorized: ${TOPIC_PAYMENT_AUTHORIZED}
+      failed: ${TOPIC_PAYMENT_FAILED}
+    kitchen:
+      accepted: ${TOPIC_KITCHEN_ACCEPTED}
+      prepared: ${TOPIC_KITCHEN_PREPARED}
+      denied: ${TOPIC_KITCHEN_DENIED}
+    delivery:
+      assigned: ${TOPIC_DELIVERY_ASSIGNED}
+      completed: ${TOPIC_DELIVERY_COMPLETED}
+
+
+
