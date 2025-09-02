@@ -93,7 +93,7 @@ public class OrderService {
         e.printStackTrace();
     }
 
-    @KafkaListener(topics = "${app.topic.payment.authorized}")
+    @KafkaListener(id = "myId1", topics = "${app.topic.payment.authorized}")
     public void listenPaidOrderAuthorized(ConsumerRecord<String, String> record) {
         String value = record.value();
         try {
@@ -103,7 +103,7 @@ public class OrderService {
         }
     }
 
-    @KafkaListener(topics = "${app.topic.payment.failed}")
+    @KafkaListener(id = "myId2", topics = "${app.topic.payment.failed}")
     public void listenPaidOrderFailed(ConsumerRecord<String, String> record) {
         String value = record.value();
         try {
@@ -113,7 +113,7 @@ public class OrderService {
         }
     }
 
-    @KafkaListener(topics = "${app.topic.payment.refund}")
+    @KafkaListener(id = "myId3", topics = "${app.topic.payment.refund}")
     public void listenPaidOrderRefund(ConsumerRecord<String, String> record) {
         String value = record.value();
         try {
