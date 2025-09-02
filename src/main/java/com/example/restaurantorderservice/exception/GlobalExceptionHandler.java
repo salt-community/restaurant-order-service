@@ -2,6 +2,8 @@ package com.example.restaurantorderservice.exception;
 
 import com.example.restaurantorderservice.exception.custom.JsonMapperException;
 import org.springframework.http.HttpStatus;
+import com.example.restaurantorderservice.exception.custom.NotFoundException;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -10,6 +12,9 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import java.time.LocalDateTime;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
@@ -44,5 +49,12 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponseDto> handleJsonMapperException(JsonMapperException e) {
         logException(e);
         return buildResponse("Internal Server Error", HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @ExceptionHandler(NotFoundException.class)
+    public ResponseEntity<Map<String, String>> handleNotFound(NotFoundException ex) {
+        Map<String, String> error = new HashMap<>();
+        error.put("error", ex.getMessage());
+        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
     }
 }
