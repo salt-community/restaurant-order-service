@@ -1,5 +1,6 @@
 package com.example.restaurantorderservice.exception;
 
+import com.example.restaurantorderservice.exception.custom.JsonMapperException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -18,11 +19,15 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(status).body(error);
     }
 
+    private void logException(Exception e) {
+        System.out.println("e.getClass() = " + e.getClass());
+        System.out.println("e.getMessage() = " + e.getMessage());
+        System.out.println("e.getCause() = " + e.getCause());
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponseDto> handleValidationExceptions(Exception ex) {
-        System.out.println("ex.getClass() = " + ex.getClass());
-        System.out.println("ex.getMessage() = " + ex.getMessage());
-        System.out.println("ex.getCause() = " + ex.getCause());
+        logException(ex);
         return buildResponse("Internal Server Error", HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
@@ -33,5 +38,11 @@ public class GlobalExceptionHandler {
     })
     public ResponseEntity<ErrorResponseDto> handleBadRequest(Exception e) {
         return buildResponse("Bad request", HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(JsonMapperException.class)
+    public ResponseEntity<ErrorResponseDto> handleJsonMapperException(JsonMapperException e) {
+        logException(e);
+        return buildResponse("Internal Server Error", HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }

@@ -3,6 +3,7 @@ package com.example.restaurantorderservice.service;
 //import com.example.restaurantorderservice.dto.kafka.KafkaOrderDto;
 
 import com.example.restaurantorderservice.dto.request.OrderRequestDto;
+import com.example.restaurantorderservice.exception.custom.JsonMapperException;
 import com.example.restaurantorderservice.model.Order;
 import com.example.restaurantorderservice.dto.kafka.KafkaMessageDto;
 import com.example.restaurantorderservice.outbox.OutboxEvent;
@@ -41,9 +42,7 @@ public class OrderService {
         try {
             payload = mapper.writeValueAsString(KafkaMessageDto.fromOrder(order));
         } catch (JsonProcessingException e) {
-
-            //TODO change exception
-            throw new RuntimeException(e);
+            throw new JsonMapperException(e.getMessage());
         }
 
         OutboxEvent outboxEvent = OutboxEvent.builder()
