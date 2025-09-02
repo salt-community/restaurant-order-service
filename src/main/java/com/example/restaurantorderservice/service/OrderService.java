@@ -96,8 +96,11 @@ public class OrderService {
     @KafkaListener(id = "myId1", topics = "${app.topic.payment.authorized}")
     public void listenPaidOrderAuthorized(ConsumerRecord<String, String> record) {
         String value = record.value();
+        System.out.println(">> [Authorized Payment Listener] -> listnening...");
+        System.out.println("value = " + value);
         try {
             KafkaPaidOrderAuthorizedDto dto = mapper.readValue(value, KafkaPaidOrderAuthorizedDto.class);
+            System.out.println("name = " + dto.name());
         } catch (JsonProcessingException e) {
             logJsonMappingError(e);
         }
@@ -106,8 +109,11 @@ public class OrderService {
     @KafkaListener(id = "myId2", topics = "${app.topic.payment.failed}")
     public void listenPaidOrderFailed(ConsumerRecord<String, String> record) {
         String value = record.value();
+        System.out.println(">> [Failed Payment Listener] -> listnening...");
+        System.out.println("value = " + value);
         try {
             KafkaPaidOrderFailedDto dto = mapper.readValue(value, KafkaPaidOrderFailedDto.class);
+            System.out.println("id = " + dto.id());
         } catch (JsonProcessingException e) {
             logJsonMappingError(e);
         }
@@ -116,8 +122,11 @@ public class OrderService {
     @KafkaListener(id = "myId3", topics = "${app.topic.payment.refund}")
     public void listenPaidOrderRefund(ConsumerRecord<String, String> record) {
         String value = record.value();
+        System.out.println(">> [Refund Payment Listener] -> listnening...");
+        System.out.println("value = " + value);
         try {
             KafkaPaidOrderRefunded dto = mapper.readValue(value, KafkaPaidOrderRefunded.class);
+            System.out.println("number = " + dto.number());
         } catch (JsonProcessingException e) {
             logJsonMappingError(e);
         }

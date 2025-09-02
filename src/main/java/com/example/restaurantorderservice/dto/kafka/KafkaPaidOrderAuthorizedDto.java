@@ -1,4 +1,3 @@
 package com.example.restaurantorderservice.dto.kafka;
 
-public record KafkaPaidOrderAuthorizedDto() {
-}
+public record KafkaPaidOrderAuthorizedDto(String name) {}

@@ -1,4 +1,3 @@
 package com.example.restaurantorderservice.dto.kafka;
 
-public record KafkaPaidOrderRefunded() {
-}
+public record KafkaPaidOrderRefunded(int number) {}

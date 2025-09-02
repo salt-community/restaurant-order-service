@@ -1,4 +1,5 @@
 package com.example.restaurantorderservice.dto.kafka;
 
-public class KafkaPaidOrderFailedDto {
-}
+import java.util.UUID;
+
+public record KafkaPaidOrderFailedDto(UUID id) {}
