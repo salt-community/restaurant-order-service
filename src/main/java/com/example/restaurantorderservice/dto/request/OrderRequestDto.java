@@ -4,7 +4,6 @@ import com.example.restaurantorderservice.enums.OrderStatus;
 import com.example.restaurantorderservice.model.Order;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.Size;
 
 import java.time.Instant;
 import java.util.List;

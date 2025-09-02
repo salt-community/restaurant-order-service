@@ -2,10 +2,7 @@ package com.example.restaurantorderservice.model;
 
 import com.example.restaurantorderservice.enums.OrderStatus;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.Instant;
 import java.util.List;
@@ -14,6 +11,7 @@ import java.util.UUID;
 @Entity
 @Getter
 @Setter
+@ToString(exclude = "items")
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "orders")

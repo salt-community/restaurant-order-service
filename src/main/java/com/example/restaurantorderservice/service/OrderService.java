@@ -1,10 +1,10 @@
 package com.example.restaurantorderservice.service;
 
 import com.example.restaurantorderservice.dto.kafka.KafkaMessageDto;
-import com.example.restaurantorderservice.dto.kafka.KafkaPaidOrderAuthorizedDto;
 import com.example.restaurantorderservice.dto.kafka.KafkaPaidOrderFailedDto;
 import com.example.restaurantorderservice.dto.kafka.KafkaPaidOrderRefunded;
 import com.example.restaurantorderservice.dto.request.OrderRequestDto;
+import com.example.restaurantorderservice.enums.OrderStatus;
 import com.example.restaurantorderservice.exception.custom.JsonMapperException;
 import com.example.restaurantorderservice.exception.custom.NotFoundException;
 import com.example.restaurantorderservice.model.Order;
@@ -67,6 +67,12 @@ public class OrderService {
         orderRepository.delete(order);
     }
 
+    public void cancelOrder(UUID orderId) {
+        Order order = getOrderById(orderId);
+        order.setOrderStatus(OrderStatus.CANCELED);
+        orderRepository.save(order);
+    }
+
     public Order getOrderById(UUID orderId) {
         return orderRepository
             .findById(orderId)
@@ -93,27 +99,16 @@ public class OrderService {
         e.printStackTrace();
     }
 
-    @KafkaListener(id = "myId1", topics = "${app.topic.payment.authorized}")
-    public void listenPaidOrderAuthorized(ConsumerRecord<String, String> record) {
-        String value = record.value();
-        System.out.println(">> [Authorized Payment Listener] -> listnening...");
-        System.out.println("value = " + value);
-        try {
-            KafkaPaidOrderAuthorizedDto dto = mapper.readValue(value, KafkaPaidOrderAuthorizedDto.class);
-            System.out.println("name = " + dto.name());
-        } catch (JsonProcessingException e) {
-            logJsonMappingError(e);
-        }
-    }
-
     @KafkaListener(id = "myId2", topics = "${app.topic.payment.failed}")
     public void listenPaidOrderFailed(ConsumerRecord<String, String> record) {
         String value = record.value();
-        System.out.println(">> [Failed Payment Listener] -> listnening...");
-        System.out.println("value = " + value);
         try {
             KafkaPaidOrderFailedDto dto = mapper.readValue(value, KafkaPaidOrderFailedDto.class);
-            System.out.println("id = " + dto.id());
+            UUID orderId = UUID.fromString(dto.orderId());
+            System.out.println("id = " + orderId);
+            cancelOrder(orderId);
+            System.out.println("getOrder(orderId) = " + getOrder(orderId));
+            //TODO: Produce new topic
         } catch (JsonProcessingException e) {
             logJsonMappingError(e);
         }
@@ -122,11 +117,12 @@ public class OrderService {
     @KafkaListener(id = "myId3", topics = "${app.topic.payment.refund}")
     public void listenPaidOrderRefund(ConsumerRecord<String, String> record) {
         String value = record.value();
-        System.out.println(">> [Refund Payment Listener] -> listnening...");
-        System.out.println("value = " + value);
         try {
             KafkaPaidOrderRefunded dto = mapper.readValue(value, KafkaPaidOrderRefunded.class);
-            System.out.println("number = " + dto.number());
+            UUID orderId = UUID.fromString(dto.orderId());
+            cancelOrder(orderId);
+            System.out.println("getOrder(orderId) = " + getOrder(orderId));
+            //TODO: Produce new topic
         } catch (JsonProcessingException e) {
             logJsonMappingError(e);
         }

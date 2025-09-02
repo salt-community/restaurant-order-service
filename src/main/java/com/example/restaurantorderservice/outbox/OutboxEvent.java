@@ -21,9 +21,6 @@ public class OutboxEvent {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID outboxId;
 
-    @Enumerated(EnumType.STRING)
-    private OrderStatus orderStatus;
-
     private UUID orderId;
 
     @Column(columnDefinition = "TEXT")
