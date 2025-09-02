@@ -14,6 +14,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
 import java.util.UUID;
@@ -32,6 +33,7 @@ public class OrderService {
 
     private final ObjectMapper mapper;
 
+    @Transactional
     public UUID createOrder(OrderRequestDto req) {
         Order order = req.toOrder();
         orderRepository.save(order);
