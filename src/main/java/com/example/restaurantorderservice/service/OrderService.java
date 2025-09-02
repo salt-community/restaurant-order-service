@@ -1,7 +1,8 @@
 package com.example.restaurantorderservice.service;
 
-//import com.example.restaurantorderservice.dto.kafka.KafkaOrderDto;
-
+import com.example.restaurantorderservice.dto.kafka.KafkaPaidOrderAuthorizedDto;
+import com.example.restaurantorderservice.dto.kafka.KafkaPaidOrderFailedDto;
+import com.example.restaurantorderservice.dto.kafka.KafkaPaidOrderRefunded;
 import com.example.restaurantorderservice.dto.kafka.KafkaMessageDto;
 import com.example.restaurantorderservice.dto.request.OrderRequestDto;
 import com.example.restaurantorderservice.exception.custom.JsonMapperException;
@@ -14,6 +15,8 @@ import com.example.restaurantorderservice.repository.OrderRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
+import org.apache.kafka.clients.consumer.ConsumerRecord;
+import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -84,6 +87,14 @@ public class OrderService {
         }
     }
 
+    private void logJsonMappingError(Exception e) {
+        System.out.println("EXCEPTION DESERIALIZING MESSAGE!");
+        System.out.println("e.getClass() = " + e.getClass());
+        System.out.println("e.getMessage() = " + e.getMessage());
+        System.out.println("e.getCause() = " + e.getCause());
+        e.printStackTrace();
+    }
+
 //    @KafkaListener(id = "myId", topics = "orders")
 //    public void listen(ConsumerRecord<String, String> record) {
 //        // injecting ConsumerRecord in case we need message metadata
@@ -100,5 +111,47 @@ public class OrderService {
 //            System.out.println("EXCEPTION DESERIALIZING MESSAGE!");
 //            e.printStackTrace();
 //        }
+    @KafkaListener(id = "myId", topics = "TOPIC_AUTHORIZED")
+    public void listenPaidOrderAuthorized(ConsumerRecord<String, String> record) {
+        String value = record.value();
+        try {
+            KafkaPaidOrderAuthorizedDto dto = mapper.readValue(value, KafkaPaidOrderAuthorizedDto.class);
+        } catch (JsonProcessingException e) {
+            logJsonMappingError(e);
+        }
+    }
+
+    @KafkaListener(id = "myId", topics = "TOPIC_FAILED")
+    public void listenPaidOrderFailed(ConsumerRecord<String, String> record) {
+        String value = record.value();
+        try {
+            KafkaPaidOrderFailedDto dto = mapper.readValue(value, KafkaPaidOrderFailedDto.class);
+        } catch (JsonProcessingException e) {
+            logJsonMappingError(e);
+        }
+    }
+
+    @KafkaListener(id = "myId", topics = "TOPIC_REFUND")
+    public void listenPaidOrderRefund(ConsumerRecord<String, String> record) {
+        String value = record.value();
+        try {
+            KafkaPaidOrderRefunded dto = mapper.readValue(value, KafkaPaidOrderRefunded.class);
+        } catch (JsonProcessingException e) {
+            logJsonMappingError(e);
+        }
+    }
+
+//    @Builder
+//    public record PaymentEvent (
+//        UUID eventId, // unique id for the message
+//        UUID paymentId, // Payment.id
+//        String orderId,
+//        BigDecimal amount,
+//        String providerPaymentId,
+//        PaymentStatus status, // AUTHORIZED | FAILED | REFUNDED
+//        String failureReason, // null unless FAILED
+//        Instant createdAt, // original payment timestamp
+//        Instant occurredAt // when we produced the event
+//    ){
 //    }
 }
