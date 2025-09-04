@@ -22,6 +22,7 @@ services:
   broker2:
     image: bitnami/kafka:latest
     container_name: broker2
+
     ports:
       - "9094:29094"
     environment:
