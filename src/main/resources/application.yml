@@ -29,9 +29,11 @@ app:
       refund: ${TOPIC_PAYMENT_REFUND}
       failed: ${TOPIC_PAYMENT_FAILED}
     kitchen:
-      accepted: ${TOPIC_KITCHEN_ACCEPTED}
+      inProgress: ${TOPIC_KITCHEN_IN_PROGRESS}
       prepared: ${TOPIC_KITCHEN_PREPARED}
-      denied: ${TOPIC_KITCHEN_DENIED}
+      handedOver: ${TOPIC_KITCHEN_HANDED_OVER}
+      canceled: ${TOPIC_KITCHEN_CANCELED}
+      etaUpdated: ${TOPIC_KITCHEN_ETA_UPDATED}
     delivery:
       assigned: ${TOPIC_DELIVERY_ASSIGNED}
       completed: ${TOPIC_DELIVERY_COMPLETED}
