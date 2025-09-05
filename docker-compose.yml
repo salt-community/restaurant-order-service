@@ -12,5 +12,29 @@ services:
     volumes:
       - db_data:/var/lib/postgresql/data
 
+  order-service-1:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: order-service-1
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+    env_file:
+      - .env
+
+  order-service-2:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: order-service-2
+    ports:
+      - "8081:8080"
+    depends_on:
+      - db
+    env_file:
+      - .env
+
 volumes:
   db_data:

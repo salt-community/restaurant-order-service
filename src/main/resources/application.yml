@@ -5,7 +5,7 @@ spring:
     name: restaurant-order-service
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: ${DB_URL}
+    url: ${DB_CONTAINER_URL}
     username: ${DB_USERNAME}
     password: ${DB_PASSWORD}
   jpa:
