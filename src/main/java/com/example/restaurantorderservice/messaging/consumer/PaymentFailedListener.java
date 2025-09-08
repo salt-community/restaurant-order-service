@@ -41,7 +41,7 @@ public class PaymentFailedListener {
         consumedEventRepository.save(event);
     }
 
-    private PaymentFailedDto readPaymentFailed(String json) {
+    protected PaymentFailedDto readPaymentFailed(String json) {
         try {
             return mapper.readValue(json, PaymentFailedDto.class);
         } catch (JsonProcessingException e) {

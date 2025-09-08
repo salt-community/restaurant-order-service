@@ -1,9 +1,12 @@
 package com.example.restaurantorderservice.messaging.eventDto;
 
+import lombok.Builder;
+
 import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.UUID;
 
+@Builder
 public record PaymentFailedDto(
     UUID eventId, // unique id for the message
     UUID paymentId, // Payment.id
