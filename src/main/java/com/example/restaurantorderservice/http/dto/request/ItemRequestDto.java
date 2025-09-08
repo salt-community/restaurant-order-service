@@ -14,7 +14,6 @@ public record ItemRequestDto(
         item.setItemId(itemId);
         item.setQuantity(quantity);
         item.setPrice(price);
-        System.out.println("item = " + item);
         return item;
     }
 }

@@ -34,13 +34,8 @@ public class OrderService {
     @Transactional
     public UUID createOrder(OrderRequestDto req) {
         Order order = req.toOrder();
-        System.out.println("order = " + order);
         orderRepository.save(order);
         itemRepository.saveAll(order.getItems());
-        System.out.println("order.getItems() = " + order.getItems());
-
-        System.out.println("order = " + order);
-
 
         buildOrderEvent(order, "order.created.v1");
 
