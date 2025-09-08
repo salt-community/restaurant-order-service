@@ -2,7 +2,7 @@ package com.example.restaurantorderservice.messaging.consumer;
 
 
 import com.example.restaurantorderservice.domain.service.OrderService;
-import com.example.restaurantorderservice.messaging.eventDto.PaymentRefundDto;
+import com.example.restaurantorderservice.messaging.eventDto.KitchenCanceledDto;
 import com.example.restaurantorderservice.messaging.idempotent.ConsumedEvent;
 import com.example.restaurantorderservice.messaging.idempotent.ConsumedEventRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -17,7 +17,7 @@ import java.util.UUID;
 
 @Component
 @AllArgsConstructor
-public class PaymentRefundListener {
+public class KitchenCanceledListener {
 
     private final ObjectMapper mapper;
 
@@ -25,12 +25,13 @@ public class PaymentRefundListener {
 
     private final ConsumedEventRepository consumedEventRepository;
 
-    @KafkaListener(id = "myId3", topics = "${app.topic.payment.refund}")
-    public void onPaymentRefund(ConsumerRecord<String, String> record) {
-        PaymentRefundDto dto = readPaymentRefund(record.value());
-        UUID eventId = dto.eventId();
+    @KafkaListener(id = "myId33", topics = "${app.topic.kitchen.canceled}")
+    public void onKitchenCanceled(ConsumerRecord<String, String> eventMessage) {
 
-        //Idempotency
+        KitchenCanceledDto dto = readKitchenCanceled(eventMessage.value());
+        UUID eventId = UUID.fromString(dto.eventId());
+
+        //Idempotency for consumed event, checking if we already have listened to the event
         if (consumedEventRepository.existsById(eventId)) return;
 
         UUID orderId = UUID.fromString(dto.orderId());
@@ -40,12 +41,12 @@ public class PaymentRefundListener {
         consumedEventRepository.save(event);
     }
 
-    private PaymentRefundDto readPaymentRefund(String json) {
+    private KitchenCanceledDto readKitchenCanceled(String json) {
         try {
-            return mapper.readValue(json, PaymentRefundDto.class);
+            return mapper.readValue(json, KitchenCanceledDto.class);
         } catch (JsonProcessingException e) {
             logJsonMappingError(e);
-            throw new RuntimeException("Failed to parse PaymentRefundDto", e);
+            throw new RuntimeException("Failed to parse KitchenCanceledDto", e);
         }
     }
 
