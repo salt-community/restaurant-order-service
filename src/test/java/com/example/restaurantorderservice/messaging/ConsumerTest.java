@@ -1,14 +1,19 @@
 package com.example.restaurantorderservice.messaging;
 
+import com.example.restaurantorderservice.domain.repository.ItemRepository;
+import com.example.restaurantorderservice.domain.repository.OrderRepository;
 import com.example.restaurantorderservice.messaging.eventDto.PaymentFailedDto;
-import org.junit.jupiter.api.Disabled;
+import com.example.restaurantorderservice.messaging.idempotent.ConsumedEventRepository;
+import com.example.restaurantorderservice.messaging.outbox.OutboxRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.test.context.EmbeddedKafka;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
@@ -20,7 +25,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @DirtiesContext
 @EmbeddedKafka(
     partitions = 1,
-    brokerProperties = {"listeners=PLAINTEXT://localhost:9092", "port=9092"}
+    brokerProperties = {"listeners=PLAINTEXT://localhost:9095", "port=9095"}
 )
 @ActiveProfiles("test")
 public class ConsumerTest {
@@ -31,11 +36,24 @@ public class ConsumerTest {
     @Autowired
     PaymentFailedListenerTestExtender consumer;
 
-    @Disabled
+    @MockitoBean
+    OrderRepository orderRepository;
+
+    @MockitoBean
+    ItemRepository itemRepository;
+
+    @MockitoBean
+    OutboxRepository outboxRepository;
+
+    @MockitoBean
+    ConsumedEventRepository consumedEventRepository;
+
+    @Value("${app.topic.payment.failed}")
+    String failed_payment_topic;
+
     @Test
     void shouldConsumeTopic_whenListeningToIt() throws InterruptedException {
         //Arrange
-        String topic = "${app.topic.payment.failed}";
         String payload = """
             {
             "eventId": "08243e59-a0c1-4af4-9b3b-855e7b5d3431",
@@ -45,7 +63,7 @@ public class ConsumerTest {
             """;
 
         //Act
-        kafkaTemplate.send(topic, payload);
+        kafkaTemplate.send(failed_payment_topic, payload);
 
         //Assert
         boolean messageConsumed = consumer.getLatch().await(10, TimeUnit.SECONDS);
@@ -55,7 +73,7 @@ public class ConsumerTest {
             .paymentStatus("FAILED")
             .build();
         assertTrue(messageConsumed);
-        assertEquals(consumer.getPayload(), data);
+        assertEquals(data, consumer.getPayload());
 
     }
 }

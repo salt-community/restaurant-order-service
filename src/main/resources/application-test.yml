@@ -11,6 +11,13 @@ spring:
     open-in-view: false
     hibernate:
       ddl-auto: none
+  kafka:
+    producer:
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+
+    consumer:
+      auto-offset-reset: earliest
+
 
 app:
   topic:
