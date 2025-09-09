@@ -46,11 +46,6 @@ public class OrderService {
         return getOrderById(orderId);
     }
 
-    public void removeOrder(UUID orderId) {
-        Order order = getOrderById(orderId);
-        orderRepository.delete(order);
-    }
-
     @Transactional
     public void cancelOrder(UUID orderId) {
         Order order = getOrderById(orderId);

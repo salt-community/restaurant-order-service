@@ -100,7 +100,7 @@ public class OrderController {
     @DeleteMapping("/orders/{orderId}")
     public ResponseEntity<Void> removeOrder(
         @PathVariable UUID orderId) {
-        orderService.removeOrder(orderId);
+        orderService.cancelOrder(orderId);
         return ResponseEntity.noContent().build();
     }
 
