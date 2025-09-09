@@ -69,6 +69,8 @@ Each incoming message has a unique eventId. The consumer checks if this eventId 
 
 The service exposes a REST controller for managing orders:
 
+📖 [Swagger UI](http://localhost:8080/swagger-ui/index.html) 📖
+
 - `POST /orders` → Creates a new order. This will:
 
     - Persist the order in the database.
