@@ -12,7 +12,7 @@ import com.example.restaurantorderservice.messaging.outbox.OutboxEvent;
 import com.example.restaurantorderservice.messaging.outbox.OutboxRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,7 +20,6 @@ import java.time.Instant;
 import java.util.UUID;
 
 @Service
-@AllArgsConstructor
 public class OrderService {
 
     private final OrderRepository orderRepository;
@@ -31,13 +30,26 @@ public class OrderService {
 
     private final ObjectMapper mapper;
 
+    @Value("${app.topic.order.created}")
+    private String topicOrderCreated;
+
+    @Value("${app.topic.order.canceled}")
+    private String topicOrderCanceled;
+
+    public OrderService(OrderRepository orderRepository, ItemRepository itemRepository, OutboxRepository outboxRepository, ObjectMapper mapper) {
+        this.orderRepository = orderRepository;
+        this.itemRepository = itemRepository;
+        this.outboxRepository = outboxRepository;
+        this.mapper = mapper;
+    }
+
     @Transactional
     public UUID createOrder(OrderRequestDto req) {
         Order order = req.toOrder();
         orderRepository.save(order);
         itemRepository.saveAll(order.getItems());
 
-        buildOrderEvent(order, "order.created.v1");
+        buildOrderEvent(order, topicOrderCreated);
 
         return order.getOrderId();
     }
@@ -55,7 +67,7 @@ public class OrderService {
         order.setOrderStatus(OrderStatus.CANCELED);
         orderRepository.save(order);
 
-        buildOrderEvent(order, "order.canceled.v1");
+        buildOrderEvent(order, topicOrderCanceled);
     }
 
     public Order getOrderById(UUID orderId) {
