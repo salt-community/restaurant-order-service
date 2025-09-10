@@ -91,7 +91,6 @@ To simultaneously run all 4 microservice documentation will come later on...
 3. Make sure your docker desktop app is alive and run these commands to spin up all necessary services:
 
 ```bash
-docker image prune -af
 docker run -d --name broker -p 9092:9092 apache/kafka:latest
 docker compose -f docker-compose.yml up -d
 ```
