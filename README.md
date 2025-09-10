@@ -92,9 +92,8 @@ To simultaneously run all 4 microservice documentation will come later on...
 
 ```bash
 docker image prune -af
+docker run -d --name broker -p 9092:9092 apache/kafka:latest
 docker compose -f docker-compose.yml up -d
-docker compose -f docker-compose.broker-cluster.yml up -d
-mvn spring-boot:run
 ```
 
 ### Create an order
@@ -123,10 +122,10 @@ mvn spring-boot:run
 }
 ```
 
-2. Inside your Broker on port 9092 navigate into
+2. Inside your Broker navigate into
 
 ```bash 
-cd opt/bitnami/kafka/bin
+cd opt/kafka/bin
 ```
 
 3. Consume order.created.v1 event
@@ -141,14 +140,10 @@ cd opt/bitnami/kafka/bin
 
 - Send a DeleteMapping to `/orders/{orderId}` to cancel the order and trigger the order.canceled.v1 event.
 
-```bash 
-./kafka-console-producer.sh --bootstrap-server localhost:9092 --topic order.canceled.v1
-```
-
 Alternatively, manually produce an event inside the broker:
 
 ```bash 
-cd opt/bitnami/kafka/bin
+cd opt/kafka/bin
 ```
 
 ```bash 

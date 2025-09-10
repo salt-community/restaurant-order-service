@@ -69,11 +69,12 @@ public class OrderService {
     }
 
     private void buildOrderEvent(Order order, String topic) {
+        UUID eventId = UUID.randomUUID();
         String payload = mapToJson(
-            KafkaMessageDto.fromOrder(order)
+            KafkaMessageDto.fromOrder(order, eventId)
         );
         outboxRepository.save(OutboxEvent.builder()
-            .eventId(UUID.randomUUID())
+            .eventId(eventId)
             .topic(topic)
             .orderId(order.getOrderId())
             .payload(payload)
