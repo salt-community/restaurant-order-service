@@ -97,8 +97,8 @@ public class OrderController {
             ),
         }
     )
-    @DeleteMapping("/orders/{orderId}")
-    public ResponseEntity<Void> removeOrder(
+    @DeleteMapping("/orders/cancel/{orderId}")
+    public ResponseEntity<Void> cancelOrder(
         @PathVariable UUID orderId) {
         orderService.cancelOrder(orderId);
         return ResponseEntity.noContent().build();

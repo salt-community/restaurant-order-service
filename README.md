@@ -98,7 +98,7 @@ docker compose -f docker-compose.yml up -d
 
 ### Create an order
 
-1. Post following body to `/orders` to receive the `orderId`.
+1. Post following body to `http://localhost:8081/api/orders` to receive the `orderId`.
 
 ```bash
 {
@@ -138,7 +138,8 @@ cd opt/kafka/bin
 
 #### 1. To Produce an order.canceled.v1 event either:
 
-- Send a DeleteMapping to `/orders/{orderId}` to cancel the order and trigger the order.canceled.v1 event.
+- Send a DeleteMapping to `http://localhost:8081/api/orders/{orderId}` to cancel the order and trigger the
+  order.canceled.v1 event.
 
 Alternatively, manually produce an event inside the broker:
 
