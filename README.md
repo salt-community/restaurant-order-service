@@ -15,7 +15,7 @@ The other 3 microservices:
 - [Kitchen Service](https://github.com/saltsthlm/restaurant-kitchen-service) 🧑‍🍳
 - [Delivery Service](https://github.com/saltsthlm/restaurant-delivery-service) 🚚
 
-To simulate kafka communication scroll down to further instructions
+To simulate kafka communication scroll down for further instructions
 
 ## Producing events
 
@@ -94,6 +94,8 @@ To simultaneously run all 4 microservice documentation will come later on...
 docker run -d --name broker -p 9092:9092 apache/kafka:latest
 docker compose -f docker-compose.yml up -d
 ```
+
+4. Run the application in your IDE.
 
 ### Create an order
 
