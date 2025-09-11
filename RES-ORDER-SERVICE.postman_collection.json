@@ -42,9 +42,9 @@
 					"raw": "{\n  \"orderId\":\"2f4e5d0c-9a89-21d9-8029-0242ac120003\",\n  \"status\":\"paid\"\n}"
 				},
 				"url": {
-					"raw": "{{BASE_URL}}order/{{orderId}}",
+					"raw": "{{BASE_URL}}orders/{{orderId}}",
 					"host": [
-						"{{BASE_URL}}order"
+						"{{BASE_URL}}orders"
 					],
 					"path": [
 						"{{orderId}}"
