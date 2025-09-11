@@ -7,15 +7,15 @@ spring:
     name: restaurant-order-service
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: ${DB_URL}
-    username: ${DB_USERNAME}
-    password: ${DB_PASSWORD}
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/order}
+    username: ${DB_USERNAME:order}
+    password: ${DB_PASSWORD:order}
   jpa:
     hibernate:
       ddl-auto: create-drop
     database-platform: org.hibernate.dialect.PostgreSQLDialect
   kafka:
-    #    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS}
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS}
     producer:
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
     consumer:
