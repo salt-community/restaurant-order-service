@@ -83,6 +83,11 @@ The service exposes a REST controller for managing orders:
 
 ## Getting started
 
+### Prerequisites
+
+- Docker, Postman, IntelliJ or other IDE
+- [Import Postman Collection](RES-ORDER-SERVICE.postman_collection.json)
+
 This guide is isolated for trying out the order-service.
 To simultaneously run all 4 microservice documentation will come later on...
 
