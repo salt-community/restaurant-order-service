@@ -1,5 +1,6 @@
 package com.example.restaurantorderservice.http.dto.response;
 
+import com.example.restaurantorderservice.domain.enums.OrderStatus;
 import com.example.restaurantorderservice.domain.model.Order;
 
 import java.time.Instant;
@@ -10,7 +11,8 @@ public record OrderResponseDto(
     UUID orderId,
     Instant createdAt,
     List<ItemResponseDto> items,
-    double totalPrice
+    double totalPrice,
+    OrderStatus status
 ) {
     public static OrderResponseDto fromOrder(
         Order order
@@ -21,6 +23,7 @@ public record OrderResponseDto(
             order.getItems().stream()
                 .map(ItemResponseDto::from)
                 .toList(),
-            order.getTotalPrice());
+            order.getTotalPrice(),
+            order.getOrderStatus());
     }
 }

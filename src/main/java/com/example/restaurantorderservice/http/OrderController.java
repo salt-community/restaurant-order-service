@@ -14,11 +14,16 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
 @RequestMapping("/api")
 @AllArgsConstructor
+@CrossOrigin(
+    origins = "http://localhost:3000",
+    methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE}
+)
 public class OrderController {
 
     private final OrderService orderService;
@@ -46,7 +51,8 @@ public class OrderController {
     @PostMapping("/orders")
     public ResponseEntity<OrderIdResponseDto> createOrder(
         @RequestBody @Valid OrderRequestDto req) {
-        OrderIdResponseDto response = new OrderIdResponseDto(orderService.createOrder(req));
+        Order order = orderService.createOrder(req);
+        OrderIdResponseDto response = new OrderIdResponseDto(order.getOrderId(), order.getTotalPrice());
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
@@ -75,6 +81,15 @@ public class OrderController {
         @PathVariable UUID orderId) {
         Order order = orderService.getOrder(orderId);
         return ResponseEntity.ok(OrderResponseDto.fromOrder(order));
+    }
+
+    @GetMapping("/orders")
+    public ResponseEntity<List<OrderResponseDto>> getAllOrder() {
+        List<OrderResponseDto> orders = orderService.getAllOrders()
+            .stream()
+            .map(OrderResponseDto::fromOrder)
+            .toList();
+        return ResponseEntity.ok(orders);
     }
 
     @Operation(

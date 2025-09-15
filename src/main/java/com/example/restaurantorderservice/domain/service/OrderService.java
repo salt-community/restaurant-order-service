@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -44,18 +45,22 @@ public class OrderService {
     }
 
     @Transactional
-    public UUID createOrder(OrderRequestDto req) {
+    public Order createOrder(OrderRequestDto req) {
         Order order = req.toOrder();
         orderRepository.save(order);
         itemRepository.saveAll(order.getItems());
 
         buildOrderEvent(order, topicOrderCreated);
 
-        return order.getOrderId();
+        return order;
     }
 
     public Order getOrder(UUID orderId) {
         return getOrderById(orderId);
+    }
+
+    public List<Order> getAllOrders() {
+        return orderRepository.findAll();
     }
 
     @Transactional
