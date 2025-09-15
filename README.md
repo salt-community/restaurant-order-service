@@ -77,16 +77,18 @@ The service exposes a REST controller for managing orders:
     - Write an order.created.v1 event to the outbox.
     - The Outbox Worker later publishes this event to Kafka.
 
+- `GET /orders` → Retrieve all orders no matter status.
+
 - `GET /orders/{id}` → Retrieve an order by ID.
 
-- `DELETE /orders/{id}` → Cancel an order (publishes an order.canceled.v1 event).
+- `DELETE /orders/cancel/{id}` → Cancel an order (publishes an order.canceled.v1 event).
 
 ## Getting started
 
 ### Prerequisites
 
 - Docker, Postman, IntelliJ or other IDE
-- [Import Postman Collection](RES-ORDER-SERVICE.postman_collection.json)
+- [Import Postman Collection](ORDER-SERVICE.postman_collection.json)
 
 This guide is isolated for trying out the order-service.
 To simultaneously run all 4 microservice documentation will come later on...
@@ -108,24 +110,26 @@ docker compose -f docker-compose.yml up -d
 
 ```bash
 {
-    "items":[
-        {
-        "itemId":1,
-        "quantity":2,
-        "price": 59.00
-        },
-        {
-        "itemId":1,
-        "quantity":2,
-        "price": 19.00
-        },
-        {
-        "itemId":2,
-        "quantity":4,
-        "price": 14.00
-        }
-        ]
+  "items": [
+    {
+      "itemId": 1,
+      "quantity": 2,
+      "price": 59.0
+    },
+    {
+      "itemId": 1,
+      "quantity": 2,
+      "price": 19.0
+    },
+    {
+      "itemId": 2,
+      "quantity": 4,
+      "price": 14.0
+    }
+  ],
+  "totalPrice": 212
 }
+
 ```
 
 2. Inside your Broker navigate into

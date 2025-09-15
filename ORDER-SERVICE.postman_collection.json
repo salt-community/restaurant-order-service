@@ -1,19 +1,19 @@
 {
 	"info": {
 		"_postman_id": "5f58ecd3-a6bc-40d1-8c8a-b52f1d1a2b05",
-		"name": "RES-ORDER-SERVICE",
+		"name": "ORDER-SERVICE",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "39194907"
 	},
 	"item": [
 		{
-			"name": "Create Order",
+			"name": "Order CREATE",
 			"request": {
 				"method": "POST",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"items\":[\n        {\n        \"itemId\":1,\n        \"quantity\":1,\n        \"price\": 99.00\n        }\n        ]\n}\n",
+					"raw": "{\n    \"items\":[\n        {\n        \"itemId\":1,\n        \"quantity\":1,\n        \"price\": 99.00\n        }\n        ],\n    \"totalPrice\": 99    \n}\n",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -21,9 +21,57 @@
 					}
 				},
 				"url": {
-					"raw": "{{BASE_URL}}orders",
+					"raw": "{{BASE_URL}}",
 					"host": [
-						"{{BASE_URL}}orders"
+						"{{BASE_URL}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Order CANCEL",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{BASE_URL}}/cancel/{{orderId}}",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"cancel",
+						"{{orderId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Order All orders",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"orderId\":\"2f4e5d0c-9a89-21d9-8029-0242ac120003\",\n  \"status\":\"paid\"\n}"
+				},
+				"url": {
+					"raw": "{{BASE_URL}}",
+					"host": [
+						"{{BASE_URL}}"
 					]
 				}
 			},
@@ -42,30 +90,9 @@
 					"raw": "{\n  \"orderId\":\"2f4e5d0c-9a89-21d9-8029-0242ac120003\",\n  \"status\":\"paid\"\n}"
 				},
 				"url": {
-					"raw": "{{BASE_URL}}orders/{{orderId}}",
+					"raw": "{{BASE_URL}}/{{orderId}}",
 					"host": [
-						"{{BASE_URL}}orders"
-					],
-					"path": [
-						"{{orderId}}"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "CANCEL Order by ID",
-			"request": {
-				"method": "DELETE",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n  \"orderId\":\"2f4e5d0c-9a89-21d9-8029-0242ac120003\",\n  \"status\":\"paid\"\n}"
-				},
-				"url": {
-					"raw": "{{BASE_URL}}orders/{{orderId}}",
-					"host": [
-						"{{BASE_URL}}orders"
+						"{{BASE_URL}}"
 					],
 					"path": [
 						"{{orderId}}"
