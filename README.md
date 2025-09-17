@@ -11,11 +11,13 @@ message delivery and processing across services.
 
 The other 3 microservices:
 
-- [Payment Service](https://github.com/saltsthlm/restaurant-payment-service) 💳
-- [Kitchen Service](https://github.com/saltsthlm/restaurant-kitchen-service) 🧑‍🍳
-- [Delivery Service](https://github.com/saltsthlm/restaurant-delivery-service) 🚚
+- [Payment Service](https://github.com/salt-community/restaurant-payment-service) 💳
+- [Kitchen Service](https://github.com/salt-community/restaurant-kitchen-service) 🧑‍🍳
+- [Delivery Service](https://github.com/salt-community/restaurant-delivery-service) 🚚
 
-To simulate kafka communication scroll down for further instructions
+Additionally, we have a [frontend](https://github.com/salt-community/restaurant-frontend-simulation) to visualize the backend flow.
+
+To simulate kafka communication scroll down for further instructions.
 
 ## Producing events
 
